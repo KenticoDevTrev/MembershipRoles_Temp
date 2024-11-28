@@ -3,7 +3,7 @@
 
 ## Description
 
-This is a community created package to allow Member Roles and permissions in Xperience by Kentico.
+This is a community created package to allow Member Roles and permissions in Xperience by Kentico (until this logic is baked into the product).
 
 Roles can be created, assigned to Members, and Content Items can be secured with Authentication and Member Role Permissions applied to themselves or inherited from a parent Content Folders and Web Page Items.
 
