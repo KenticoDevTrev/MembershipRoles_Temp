@@ -13,6 +13,10 @@
   
   <ItemGroup>
     <PackageReference Include="Kentico.Xperience.Admin" Version="29.7.0" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +27,17 @@
 
   <PropertyGroup>
     <AdminOrgName>memberroles</AdminOrgName>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Description>Temporary Community Implementation of Member Roles for Xperience by Kentico (Until Kentico implements this).  This package inherits all the other packages, and additionally contains the Admin UI elements.</Description>
+    <Authors>Trevor Fayas @KenticoDevTrev</Authors>
+    <Company>Xperience Community</Company>
+    <PackageProjectUrl>https://github.com/KenticoDevTrev/MembershipRoles_Temp</PackageProjectUrl>
+    <PackageIcon>kentico-icon-128x128.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/KenticoDevTrev/MembershipRoles_Temp</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>Xperience, Roles, Member, Kentico, XbyK, Permissions</PackageTags>
+    <PackageReleaseNotes>Initial Release</PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
     <AdminClientPath Include="Client\dist\**">
@@ -36,6 +51,16 @@
   </ItemGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\kentico-icon-128x128.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

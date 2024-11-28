@@ -12,8 +12,6 @@ namespace XperienceCommunity.MemberRoles
 {
     internal class MemberRolesAdminModule : AdminModule
     {
-        private IInfoProvider<TaxonomyInfo>? _taxonomyInfoProvider;
-
         public MemberRolesAdminModule()
             : base("MemberRoles")
         {

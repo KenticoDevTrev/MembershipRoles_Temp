@@ -20,7 +20,7 @@ namespace XperienceCommunity.MemberRoles
             InitializeMemberRolesResource(resource);
             InitializeMemberRoleTaxonomy();
             InitializeModuleClasses(resource);
-            InitializeResusableSchema();
+            InitializeReusableSchema();
         }
 
         private void InitializeMemberRolesResource(ResourceInfo resource)
@@ -412,7 +412,7 @@ END
             }
         }
 
-        private void InitializeResusableSchema()
+        private void InitializeReusableSchema()
         {
             var contentItemCommonData = DataClassInfoProvider.GetClasses().WhereEquals(nameof(DataClassInfo.ClassName), ContentItemCommonDataInfo.OBJECT_TYPE).FirstOrDefault() ?? throw new Exception("No Content Item Common Data Class Found, you got bigger problems than installing Member Roles!");
             var contentItemCommonDataForm = FormHelper.GetFormInfo(ContentItemCommonDataInfo.OBJECT_TYPE, false);

@@ -6,14 +6,41 @@
     <WarningsAsErrors>Nullable</WarningsAsErrors>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <RootNamespace>XperienceCommunity.MemberRoles</RootNamespace>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>Xperience Member Roles</Title>
+    <Authors>Trevor Fayas @KenticoDevTrev</Authors>
+    <Company>Xperience Community</Company>
+    <Description>Temporary Community Implementation of Member Roles for Xperience by Kentico (Until Kentico implements this).  Install XperienceCommunity.MemberRoles.Admin instead of this if doing simple installation.  This package contains the logic and Installer.</Description>
+    <PackageProjectUrl>https://github.com/KenticoDevTrev/MembershipRoles_Temp</PackageProjectUrl>
+    <PackageIcon>kentico-icon-128x128.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/KenticoDevTrev/MembershipRoles_Temp</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>Xperience, Roles, Member, Kentico, XbyK, Permissions</PackageTags>
+    <PackageReleaseNotes>Initial Release</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
     <AssemblyAttribute Include="CMS.AssemblyDiscoverableAttribute"></AssemblyAttribute>
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\kentico-icon-128x128.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="Kentico.Xperience.WebApp" Version="29.7.0" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
   
   <ItemGroup>

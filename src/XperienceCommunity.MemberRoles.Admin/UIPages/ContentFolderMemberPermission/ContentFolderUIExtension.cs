@@ -17,7 +17,7 @@ namespace XperienceCommunity.MemberRoles.Admin.UIPages.ContentFolderMemberPermis
                 Page.PageConfiguration.HeaderActions.AddActionWithCustomComponent(new RedirectActionComponent()
                 {
                     Properties = new RedirectActionComponentProperties($"/admin/{FolderPermissionsApplication.SLUG}/{ContentFolderMemberPermissionListing.SLUG}/{Page.FolderId.Id.Value}/{ContentFolderMemberSecurityPageTemplate.SLUG}")
-                }, "Manage Folder Member Permissions");
+                }, "Manage Member Permissions");
                 
                 /*
                 // Couldn't get below to work due to error

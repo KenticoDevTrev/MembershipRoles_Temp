@@ -33,11 +33,13 @@ namespace XperienceCommunity.MemberRoles.Admin.ActionComponents
         [FormComponentCommand]
         public async Task<ICommandResponse<MemberRolesPermissionSummaryClientProperties>> RefreshPermissions()
         {
+#pragma warning disable CS0618 // Type or member is obsolete - The one it currently uses is internal so have to use this
             if (FormContext is IContentItemFormContext context) {
                 var contentItemId = context.ItemId;
                 var language = context.LanguageName;
                 return ResponseFrom((await _memberPermissionSummaryRepository.GetMemberRolePermissionSummaryByContentItem(contentItemId, language)).ToClientProperties());
             }
+#pragma warning restore CS0618 // Type or member is obsolete
             return ResponseFrom(new MemberRolesPermissionSummaryClientProperties());
         }
     }
