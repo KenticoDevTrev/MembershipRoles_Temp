@@ -107,7 +107,7 @@ export const WebPageItemMemberSecurityPageTemplate = ({ breakInheritance, requir
                         {breakInheritanceVal && 
                         <>
                             <br/>
-                            <Checkbox label="Requires Authentication" size={CheckboxSize.L} name="requireAuthentication" checked={requireAuthenticationVal} onChange={(event) => setRequireAuthentication(event.target.checked)}/>
+                            <Checkbox label="Is Secure (Requires Authentication)" size={CheckboxSize.L} name="requireAuthentication" checked={requireAuthenticationVal} onChange={(event) => setRequireAuthentication(event.target.checked)}/>
                             {requireAuthenticationVal && 
                             <>
                             <br/>
