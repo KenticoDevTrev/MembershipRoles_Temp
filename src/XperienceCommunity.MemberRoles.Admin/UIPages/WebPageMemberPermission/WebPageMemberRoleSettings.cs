@@ -1,5 +1,6 @@
 ﻿using CMS.ContentEngine;
 using CMS.DataEngine;
+using Kentico.Web.Mvc.Internal;
 using Kentico.Xperience.Admin.Base;
 using Kentico.Xperience.Admin.Websites.UIPages;
 using XperienceCommunity.MemberRoles.Admin.ActionComponents;
@@ -20,12 +21,14 @@ namespace XperienceCommunity.MemberRoles.Admin.UIPages.WebPageMemberPermission
     public class WebPageItemMemberPermissionPageTemplate(IInfoProvider<WebPageItemRoleTagInfo> webPageItemRoleTagInfoProvider,
         IInfoProvider<WebPageItemMemberPermissionSettingInfo> webPageItemMemberPermissionSettingInfoProvider,
         IInfoProvider<TagInfo> tagInfoProvider,
-        IMemberPermissionSummaryRepository memberPermissionSummaryRepository) : Page<WebPageMemberRoleProperties>
+        IMemberPermissionSummaryRepository memberPermissionSummaryRepository,
+         IAdminPathRetriever adminPathRetriever) : Page<WebPageMemberRoleProperties>
     {
         private readonly IInfoProvider<WebPageItemRoleTagInfo> _webPageItemRoleTagInfoProvider = webPageItemRoleTagInfoProvider;
         private readonly IInfoProvider<WebPageItemMemberPermissionSettingInfo> _webPageItemMemberPermissionSettingInfoProvider = webPageItemMemberPermissionSettingInfoProvider;
         private readonly IInfoProvider<TagInfo> _tagInfoProvider = tagInfoProvider;
         private readonly IMemberPermissionSummaryRepository _memberPermissionSummaryRepository = memberPermissionSummaryRepository;
+        private readonly IAdminPathRetriever _adminPathRetriever = adminPathRetriever;
 
         [PageParameter(typeof(WebPageModelBinder))]
         public int WebPageItemID { get; set; }
@@ -56,7 +59,7 @@ namespace XperienceCommunity.MemberRoles.Admin.UIPages.WebPageMemberPermission
                 properties.RequireAuthentication = currentConfiguration.WebPageItemMemberPermissionSettingIsSecured;
             }
 
-            properties.MemberRolePermissionSummary = (await _memberPermissionSummaryRepository.GetMemberRolePermissionSummaryByWebPageItem(WebPageItemID)).ToClientProperties();
+            properties.MemberRolePermissionSummary = (await _memberPermissionSummaryRepository.GetMemberRolePermissionSummaryByWebPageItem(WebPageItemID)).ToClientProperties(_adminPathRetriever.GetAdminPrefix());
 
             return properties;
         }
@@ -111,7 +114,7 @@ namespace XperienceCommunity.MemberRoles.Admin.UIPages.WebPageMemberPermission
             }
 
             // regenerate summary
-            properties.MemberRolePermissionSummary = (await _memberPermissionSummaryRepository.GetMemberRolePermissionSummaryByWebPageItem(WebPageItemID)).ToClientProperties();
+            properties.MemberRolePermissionSummary = (await _memberPermissionSummaryRepository.GetMemberRolePermissionSummaryByWebPageItem(WebPageItemID)).ToClientProperties(_adminPathRetriever.GetAdminPrefix());
 
             return ResponseFrom(properties).AddSuccessMessage($"Permissions Updated and {tagsToAdd.Count()} Roles Added and {tagsToRemove.Count()} Roles Removed");
         }

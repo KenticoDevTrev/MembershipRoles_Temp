@@ -21,7 +21,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             builder.AddRoleStore<MemberRoleRoleStore<TRole>>();
 
-            builder.Services.AddScoped<IMemberAuthenticationContext, MemberAuthenticationContext>()
+            builder.Services.AddScoped<IMemberAuthenticationContext, MemberAuthenticationContext<TUser>>()
                 .AddScoped<IUserLoginStore<TUser>, ApplicationUserStore<TUser>>()
                 .AddScoped<IUserRoleStore<TUser>, MemberRoleUserRoleStore<TUser>>()
                 .AddScoped<IMemberAuthorizationFilter, MemberAuthorizationFilterAndPermissionSummaryRepository>()

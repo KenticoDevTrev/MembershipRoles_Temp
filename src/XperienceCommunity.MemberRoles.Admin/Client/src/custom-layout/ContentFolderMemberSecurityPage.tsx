@@ -87,7 +87,7 @@ export const ContentFolderMemberSecurityPageTemplate = ({ breakInheritance, requ
                         {!infoDismissed && 
                             <>
                                 <NotificationBarInfo onDismiss={dismissInfo}>
-                                To set security for members, break the inheritance and adjust your settings.  Any Content Items below this Content Folder that have the 'Inherit Permissions' set to true on the Content tab will honor these permissions. 
+                                To set security for members, break the inheritance and adjust your settings.  Any Content Items below this Content Folder that have the 'Override Inherited Member Permissions' set to false on the Content tab will honor these permissions. 
                                 </NotificationBarInfo><br/>
                             </>
                         }

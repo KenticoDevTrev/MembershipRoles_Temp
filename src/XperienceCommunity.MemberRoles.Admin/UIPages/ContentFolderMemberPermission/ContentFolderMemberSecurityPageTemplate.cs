@@ -1,5 +1,6 @@
 ﻿using CMS.ContentEngine;
 using CMS.DataEngine;
+using Kentico.Web.Mvc.Internal;
 using Kentico.Xperience.Admin.Base;
 using XperienceCommunity.MemberRoles.Admin.ActionComponents;
 using XperienceCommunity.MemberRoles.Admin.Extensions;
@@ -18,15 +19,17 @@ using XperienceCommunity.MemberRoles.Repositories;
 
 namespace XperienceCommunity.MemberRoles.Admin.UIPages.ContentFolderMemberPermission
 {
-    public class ContentFolderMemberSecurityPageTemplate(IInfoProvider<ContentFolderRoleTagInfo> ContentFolderRoleTagInfoProvider,
-        IInfoProvider<ContentFolderMemberPermissionSettingInfo> ContentFolderMemberPermissionSettingInfoProvider,
+    public class ContentFolderMemberSecurityPageTemplate(IInfoProvider<ContentFolderRoleTagInfo> contentFolderRoleTagInfoProvider,
+        IInfoProvider<ContentFolderMemberPermissionSettingInfo> contentFolderMemberPermissionSettingInfoProvider,
         IInfoProvider<TagInfo> tagInfoProvider,
-        IMemberPermissionSummaryRepository memberPermissionSummaryRepository) : Page<ContentFolderMemberRoleProperties>
+        IMemberPermissionSummaryRepository memberPermissionSummaryRepository,
+        IAdminPathRetriever adminPathRetriever) : Page<ContentFolderMemberRoleProperties>
     {
-        private readonly IInfoProvider<ContentFolderRoleTagInfo> _ContentFolderRoleTagInfoProvider = ContentFolderRoleTagInfoProvider;
-        private readonly IInfoProvider<ContentFolderMemberPermissionSettingInfo> _ContentFolderMemberPermissionSettingInfoProvider = ContentFolderMemberPermissionSettingInfoProvider;
+        private readonly IInfoProvider<ContentFolderRoleTagInfo> _contentFolderRoleTagInfoProvider = contentFolderRoleTagInfoProvider;
+        private readonly IInfoProvider<ContentFolderMemberPermissionSettingInfo> _contentFolderMemberPermissionSettingInfoProvider = contentFolderMemberPermissionSettingInfoProvider;
         private readonly IInfoProvider<TagInfo> _tagInfoProvider = tagInfoProvider;
         private readonly IMemberPermissionSummaryRepository _memberPermissionSummaryRepository = memberPermissionSummaryRepository;
+        private readonly IAdminPathRetriever _adminPathRetriever = adminPathRetriever;
         public const string SLUG = "permissions";
 
         [PageParameter(typeof(IntPageModelBinder))]
@@ -44,7 +47,7 @@ namespace XperienceCommunity.MemberRoles.Admin.UIPages.ContentFolderMemberPermis
                 .WhereEquals(nameof(ContentFolderRoleTagInfo.ContentFolderRoleTagContentFolderID), ContentFolderID)
                 .GetEnumerableTypedResultAsync();
 
-            var currentConfiguration = (await _ContentFolderMemberPermissionSettingInfoProvider.Get()
+            var currentConfiguration = (await _contentFolderMemberPermissionSettingInfoProvider.Get()
                 .WhereEquals(nameof(ContentFolderMemberPermissionSettingInfo.ContentFolderMemberPermissionContentFolderID), ContentFolderID)
                 .GetEnumerableTypedResultAsync())
                 .FirstOrDefault();
@@ -58,7 +61,7 @@ namespace XperienceCommunity.MemberRoles.Admin.UIPages.ContentFolderMemberPermis
                 properties.RequireAuthentication = currentConfiguration.ContentFolderMemberPermissionSettingIsSecured;
             }
 
-            properties.MemberRolePermissionSummary = (await _memberPermissionSummaryRepository.GetMemberRolePermissionSummaryByContentFolder(ContentFolderID)).ToClientProperties();
+            properties.MemberRolePermissionSummary = (await _memberPermissionSummaryRepository.GetMemberRolePermissionSummaryByContentFolder(ContentFolderID)).ToClientProperties(_adminPathRetriever.GetAdminPrefix());
 
             return properties;
         }
@@ -66,7 +69,7 @@ namespace XperienceCommunity.MemberRoles.Admin.UIPages.ContentFolderMemberPermis
         [PageCommand]
         public async Task<ICommandResponse<ContentFolderMemberRoleData>> SetProperties(ContentFolderMemberRoleData properties)
         {
-            var currentConfiguration = (await _ContentFolderMemberPermissionSettingInfoProvider.Get()
+            var currentConfiguration = (await _contentFolderMemberPermissionSettingInfoProvider.Get()
                 .WhereEquals(nameof(ContentFolderMemberPermissionSettingInfo.ContentFolderMemberPermissionContentFolderID), ContentFolderID)
                 .GetEnumerableTypedResultAsync())
                 .FirstOrDefault() ?? new ContentFolderMemberPermissionSettingInfo();
@@ -77,7 +80,7 @@ namespace XperienceCommunity.MemberRoles.Admin.UIPages.ContentFolderMemberPermis
 
             if (currentConfiguration.HasChanged)
             {
-                _ContentFolderMemberPermissionSettingInfoProvider.Set(currentConfiguration);
+                _contentFolderMemberPermissionSettingInfoProvider.Set(currentConfiguration);
             }
 
             // handle taxonomies
@@ -95,7 +98,7 @@ namespace XperienceCommunity.MemberRoles.Admin.UIPages.ContentFolderMemberPermis
             var tagsToAdd = properties.MemberRoleTagIds.Except(selectedTags);
             foreach (var tagToAdd in tagsToAdd)
             {
-                _ContentFolderRoleTagInfoProvider.Set(new ContentFolderRoleTagInfo()
+                _contentFolderRoleTagInfoProvider.Set(new ContentFolderRoleTagInfo()
                 {
                     ContentFolderRoleTagContentFolderID = ContentFolderID,
                     ContentFolderRoleTagTagID = tagToAdd
@@ -103,17 +106,17 @@ namespace XperienceCommunity.MemberRoles.Admin.UIPages.ContentFolderMemberPermis
             }
 
             // Remove old items
-            var tagsToRemove = await _ContentFolderRoleTagInfoProvider.Get()
+            var tagsToRemove = await _contentFolderRoleTagInfoProvider.Get()
                .WhereEquals(nameof(ContentFolderRoleTagInfo.ContentFolderRoleTagContentFolderID), ContentFolderID)
                .WhereIn(nameof(ContentFolderRoleTagInfo.ContentFolderRoleTagTagID), selectedTags.Except(properties.MemberRoleTagIds))
                .GetEnumerableTypedResultAsync();
             foreach (var tagToRemove in tagsToRemove)
             {
-                _ContentFolderRoleTagInfoProvider.Delete(tagToRemove);
+                _contentFolderRoleTagInfoProvider.Delete(tagToRemove);
             }
 
             // regenerate summary
-            properties.MemberRolePermissionSummary = (await _memberPermissionSummaryRepository.GetMemberRolePermissionSummaryByContentFolder(ContentFolderID)).ToClientProperties();
+            properties.MemberRolePermissionSummary = (await _memberPermissionSummaryRepository.GetMemberRolePermissionSummaryByContentFolder(ContentFolderID)).ToClientProperties(_adminPathRetriever.GetAdminPrefix());
 
             return ResponseFrom(properties).AddSuccessMessage($"Permissions Updated and {tagsToAdd.Count()} Roles Added and {tagsToRemove.Count()} Roles Removed");
         }

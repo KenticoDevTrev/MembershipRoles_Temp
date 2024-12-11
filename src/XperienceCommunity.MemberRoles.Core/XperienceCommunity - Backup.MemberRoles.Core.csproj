@@ -17,9 +17,7 @@
     <RepositoryUrl>https://github.com/KenticoDevTrev/MembershipRoles_Temp</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>Xperience, Roles, Member, Kentico, XbyK, Permissions</PackageTags>
-    <PackageReleaseNotes>Added Indicator on installer that it ran for dependent packages.</PackageReleaseNotes>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>1.0.5</Version>
+    <PackageReleaseNotes>Initial Release</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

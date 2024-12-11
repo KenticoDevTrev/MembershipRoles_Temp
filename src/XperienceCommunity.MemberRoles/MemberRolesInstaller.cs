@@ -13,6 +13,7 @@ namespace XperienceCommunity.MemberRoles
     {
         private readonly IInfoProvider<ResourceInfo> _resourceInfoProvider = resourceInfoProvider;
         private readonly IInfoProvider<TaxonomyInfo> _taxonomyInfoProvider = taxonomyInfoProvider;
+        public bool InstallationRan { get; set; } = false;
 
         public void Install()
         {
@@ -21,6 +22,7 @@ namespace XperienceCommunity.MemberRoles
             InitializeMemberRoleTaxonomy();
             InitializeModuleClasses(resource);
             InitializeReusableSchema();
+            InstallationRan = true;
         }
 
         private void InitializeMemberRolesResource(ResourceInfo resource)
@@ -47,7 +49,7 @@ namespace XperienceCommunity.MemberRoles
             }
         }
 
-        private void InitializeModuleClasses(ResourceInfo resource)
+        private static void InitializeModuleClasses(ResourceInfo resource)
         {
             var dataClassesByName = DataClassInfoProvider.GetClasses().WhereIn(nameof(DataClassInfo.ClassName), 
                     ["XperienceCommunity.ContentFolderMemberPermissionSetting", "XperienceCommunity.ContentFolderRoleTag", "XperienceCommunity.MemberRoleTag", "XperienceCommunity.WebPageItemMemberPermissionSetting", "XperienceCommunity.WebPageItemRoleTag"]).GetEnumerableTypedResult()
@@ -67,7 +69,7 @@ namespace XperienceCommunity.MemberRoles
 
         }
 
-        private void InitializeMemberRoleTag(DataClassInfo info, int resourceId)
+        private static void InitializeMemberRoleTag(DataClassInfo info, int resourceId)
         {
             info.ClassDisplayName = "Member Role Tags";
             info.ClassName = "XperienceCommunity.MemberRoleTag";
@@ -136,7 +138,7 @@ END
             }
         }
  
-        private void InitializeWebPageItemMemberPermissionSetting(DataClassInfo info, int resourceId)
+        private static void InitializeWebPageItemMemberPermissionSetting(DataClassInfo info, int resourceId)
         {
             info.ClassDisplayName = "Web Page Item Member Permission Settings";
             info.ClassName = "XperienceCommunity.WebPageItemMemberPermissionSetting";
@@ -204,7 +206,7 @@ END
             }
         }
 
-        private void InitializeWebPageItemRoleTag(DataClassInfo info, int resourceId)
+        private static void InitializeWebPageItemRoleTag(DataClassInfo info, int resourceId)
         {
             info.ClassDisplayName = "Web Page Item Role Tags";
             info.ClassName = "XperienceCommunity.WebPageItemRoleTag";
@@ -273,7 +275,7 @@ END
             }
         }
 
-        private void InitializeContentFolderMemberPermissionSettings(DataClassInfo info, int resourceId)
+        private static void InitializeContentFolderMemberPermissionSettings(DataClassInfo info, int resourceId)
         {
             info.ClassDisplayName = "Content Folder Member Permission Settings";
             info.ClassName = "XperienceCommunity.ContentFolderMemberPermissionSetting";
@@ -341,7 +343,7 @@ END
             }
         }
 
-        private void InitializeContentFolderRoleTag(DataClassInfo info, int resourceId)
+        private static void InitializeContentFolderRoleTag(DataClassInfo info, int resourceId)
         {
             info.ClassDisplayName = "Content Folder Role Tags";
             info.ClassName = "XperienceCommunity.ContentFolderRoleTag";
@@ -412,7 +414,7 @@ END
             }
         }
 
-        private void InitializeReusableSchema()
+        private static void InitializeReusableSchema()
         {
             var contentItemCommonData = DataClassInfoProvider.GetClasses().WhereEquals(nameof(DataClassInfo.ClassName), ContentItemCommonDataInfo.OBJECT_TYPE).FirstOrDefault() ?? throw new Exception("No Content Item Common Data Class Found, you got bigger problems than installing Member Roles!");
             var contentItemCommonDataForm = FormHelper.GetFormInfo(ContentItemCommonDataInfo.OBJECT_TYPE, false);

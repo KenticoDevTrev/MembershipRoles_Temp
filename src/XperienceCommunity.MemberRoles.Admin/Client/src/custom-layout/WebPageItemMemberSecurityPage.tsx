@@ -92,7 +92,7 @@ export const WebPageItemMemberSecurityPageTemplate = ({ breakInheritance, requir
                         {!infoDismissed && 
                             <>
                                 <NotificationBarInfo onDismiss={dismissInfo}>
-                                To set security for members, break the inheritance and adjust your settings.  Any Web Page Item at or below this that has the 'Inherit Permissions' set to true on the Content tab will honor these permissions. 
+                                To set security for members, break the inheritance and adjust your settings.  Any Web Page Item at or below this that has the 'Override Inherited Member Permissions' set to false on the Content tab will honor these permissions.
                                 </NotificationBarInfo><br/>
                             </>
                         }

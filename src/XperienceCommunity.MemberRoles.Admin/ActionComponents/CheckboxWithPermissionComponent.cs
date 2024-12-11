@@ -1,19 +1,19 @@
-﻿using Kentico.Xperience.Admin.Base;
+﻿using Kentico.Web.Mvc.Internal;
+using Kentico.Xperience.Admin.Base;
 using Kentico.Xperience.Admin.Base.Forms;
 using XperienceCommunity.MemberRoles.Admin.ActionComponents;
 using XperienceCommunity.MemberRoles.Admin.Extensions;
-using XperienceCommunity.MemberRoles.Admin.UIPages.ContentFolderMemberPermission;
-using XperienceCommunity.MemberRoles.Models;
 using XperienceCommunity.MemberRoles.Repositories;
 
 [assembly: RegisterFormComponent(CheckboxWithPermissionComponent.IDENTIFIER, typeof(CheckboxWithPermissionComponent), "Checkbox with Member Role Permission Summary")]
 
 namespace XperienceCommunity.MemberRoles.Admin.ActionComponents
 {
-    public class CheckboxWithPermissionComponent(IMemberPermissionSummaryRepository memberPermissionSummaryRepository) : FormComponent<CheckboxWithMemberRoleSummaryClientProperties, bool>
+    public class CheckboxWithPermissionComponent(IMemberPermissionSummaryRepository memberPermissionSummaryRepository, IAdminPathRetriever adminPathRetriever) : FormComponent<CheckboxWithMemberRoleSummaryClientProperties, bool>
     {
         public const string IDENTIFIER = "XperienceCommunity.MemberRoles.CheckboxWithPermissionsSummary";
         private readonly IMemberPermissionSummaryRepository _memberPermissionSummaryRepository = memberPermissionSummaryRepository;
+        private readonly IAdminPathRetriever _adminPathRetriever = adminPathRetriever;
 
         public override string ClientComponentName => "@memberroles/web-admin/CheckboxWithPermission";
 
@@ -23,7 +23,7 @@ namespace XperienceCommunity.MemberRoles.Admin.ActionComponents
             if (FormContext is IContentItemFormContext context) {
                 var contentItemId = context.ItemId;
                 var language = context.LanguageName;
-                clientProperties.MemberRolePermissionSummary = (await _memberPermissionSummaryRepository.GetMemberRolePermissionSummaryByContentItem(contentItemId, language)).ToClientProperties();
+                clientProperties.MemberRolePermissionSummary = (await _memberPermissionSummaryRepository.GetMemberRolePermissionSummaryByContentItem(contentItemId, language)).ToClientProperties(_adminPathRetriever.GetAdminPrefix());
             }
 #pragma warning restore CS0618 // Type or member is obsolete
 
@@ -37,7 +37,7 @@ namespace XperienceCommunity.MemberRoles.Admin.ActionComponents
             if (FormContext is IContentItemFormContext context) {
                 var contentItemId = context.ItemId;
                 var language = context.LanguageName;
-                return ResponseFrom((await _memberPermissionSummaryRepository.GetMemberRolePermissionSummaryByContentItem(contentItemId, language)).ToClientProperties());
+                return ResponseFrom((await _memberPermissionSummaryRepository.GetMemberRolePermissionSummaryByContentItem(contentItemId, language)).ToClientProperties(_adminPathRetriever.GetAdminPrefix()));
             }
 #pragma warning restore CS0618 // Type or member is obsolete
             return ResponseFrom(new MemberRolesPermissionSummaryClientProperties());

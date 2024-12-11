@@ -5,10 +5,13 @@ using XperienceCommunity.MemberRoles.Models;
 
 namespace XperienceCommunity.MemberRoles.Repositories.Implementation
 {
-    internal class MemberAuthenticationContext(IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager) : IMemberAuthenticationContext
+    internal class MemberAuthenticationContext<TUser>(IHttpContextAccessor httpContextAccessor,
+        UserManager<TUser> userManager,
+        IUserRoleStore<TUser> userRoleStore) : IMemberAuthenticationContext where TUser : ApplicationUser, new()
     {
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
-        private readonly UserManager<ApplicationUser> _userManager = userManager;
+        private readonly UserManager<TUser> _userManager = userManager;
+        private readonly IUserRoleStore<TUser> _userRoleStore = userRoleStore;
 
         public async Task<AuthenticationContext> GetAuthenticationContext()
         {
@@ -25,7 +28,7 @@ namespace XperienceCommunity.MemberRoles.Repositories.Implementation
                 }
                 var user = (await _userManager.GetUserAsync(context.User));
                 if (user != null) {
-                    roles.AddRange((await _userManager.GetRolesAsync(user)).Select(x => x.ToLowerInvariant()));
+                    roles.AddRange((await _userRoleStore.GetRolesAsync(user, CancellationToken.None)).Select(x => x.ToLowerInvariant()));
                 }
             }
 

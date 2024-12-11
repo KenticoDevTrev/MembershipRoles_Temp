@@ -7,7 +7,7 @@ namespace XperienceCommunity.MemberRoles.Admin.Extensions
 {
     public static class MemberRolesPermissionSummaryClientPropertiesExtensions
     {
-        public static MemberRolesPermissionSummaryClientProperties ToClientProperties(this MemberRolePermissionSummary summary)
+        public static MemberRolesPermissionSummaryClientProperties ToClientProperties(this MemberRolePermissionSummary summary, string adminPathPrefixFromIAdminPathRetriever)
         {
             string inheritFrom = summary.InheritanceType switch
             {
@@ -22,11 +22,11 @@ namespace XperienceCommunity.MemberRoles.Admin.Extensions
             var link = "";
             if (summary.InheritanceType == PermissionInheritanceType.WebPageItem && !summary.PermissionIsSelf && summary.InheritedFromId > 0 && summary.ChannelId > 0)
             {
-                link = $"/admin/webpages-{summary.ChannelId}/en_{summary.InheritedFromId}/properties/member-permissions";
+                link = $"/{adminPathPrefixFromIAdminPathRetriever.Trim('/')}/webpages-{summary.ChannelId}/en_{summary.InheritedFromId}/properties/member-permissions";
             }
             if (summary.InheritanceType == PermissionInheritanceType.ContentFolder && !summary.PermissionIsSelf && summary.InheritedFromId > 0)
             {
-                link = $"/admin/{FolderPermissionsApplication.SLUG}/{ContentFolderMemberPermissionListing.SLUG}/{summary.InheritedFromId}/{ContentFolderMemberSecurityPageTemplate.SLUG}";
+                link = $"/{adminPathPrefixFromIAdminPathRetriever.Trim('/')}/{FolderPermissionsApplication.SLUG}/{ContentFolderMemberPermissionListing.SLUG}/{summary.InheritedFromId}/{ContentFolderMemberSecurityPageTemplate.SLUG}";
             }
 
             return new MemberRolesPermissionSummaryClientProperties(inheritFrom, summary.RequiresAuthentication, summary.MemberRoles, link);

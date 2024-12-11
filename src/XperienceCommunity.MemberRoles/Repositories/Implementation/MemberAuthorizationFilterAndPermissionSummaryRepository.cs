@@ -198,7 +198,7 @@ from
 		from 
 		(
 			select WP1.WebPageItemContentItemID,
-			COALESCE({string.Join(",", webPagePermissionSettingCoalesceItems)}) as MemberPermissionID
+			COALESCE(null, {string.Join(",", webPagePermissionSettingCoalesceItems)}) as MemberPermissionID
 			from CMS_WebPageItem as WP1 left join XperienceCommunity_WebPageItemMemberPermissionSetting as MPS1 on WP1.WebPageItemID = MPS1.WebPageItemMemberPermissionSettingWebPageItemID and MPS1.WebPageItemMemberPermissionSettingBreakInheritance = 1
 			{string.Join(" ", webPageTableJoinItems)}
 			where WP1.WebPageItemContentItemID in ({string.Join(',', contentIds)})
@@ -223,7 +223,7 @@ from
 		from 
 		(
 			Select CF1.ContentFolderID,
-			COALESCE({string.Join(",", folderPermissionSettingCoalesceItems)}
+			COALESCE(null, {string.Join(",", folderPermissionSettingCoalesceItems)}
 			) as MemberPermissionID
 			from CMS_ContentItem
 			inner join CMS_ContentFolder as CF1 on CF1.ContentFolderID = ContentItemContentFolderID	left join XperienceCommunity_ContentFolderMemberPermissionSetting as CFS1 on CF1.ContentFolderID = CFS1.ContentFolderMemberPermissionContentFolderID and CFS1.ContentFolderMemberPermissionSettingBreakInheritance = 1
@@ -251,7 +251,7 @@ from
 
         private async Task<int> GetContentFolderMaxDepth()
         {
-            return await _progressiveCache.LoadAsync(async cs => {
+            var depth = await _progressiveCache.LoadAsync(async cs => {
                 if (cs.Cached) {
                     cs.CacheDependency = CacheHelper.GetCacheDependency($"{ContentFolderInfo.OBJECT_TYPE}|all");
                 }
@@ -259,11 +259,12 @@ from
                 var query = @"select max(Depth) as MaxDepth from (select LEN(ContentFolderTreePath) - LEN(REPLACE(ContentFolderTreePath, '/', '')) as Depth  from CMS_ContentFolder) DepthQuery";
                 return (int)(await ExecuteQueryAsync(query, [], QueryTypeEnum.SQLQuery)).Tables[0].Rows[0]["MaxDepth"];
             }, new CacheSettings(1440, "GetContentFolderMaxDepth"));
+            return depth < 1 ? 1 : depth;
         }
 
         private async Task<int> GetWebPageItemMaxDepth()
         {
-            return await _progressiveCache.LoadAsync(async cs => {
+            var depth = await _progressiveCache.LoadAsync(async cs => {
                 if (cs.Cached) {
                     cs.CacheDependency = CacheHelper.GetCacheDependency($"{ContentFolderInfo.OBJECT_TYPE}|all");
                 }
@@ -271,6 +272,7 @@ from
                 var query = @"select max(Depth) as MaxDepth from (select LEN(WebPageItemTreePath) - LEN(REPLACE(WebPageItemTreePath, '/', '')) as Depth  from CMS_WebPageItem) DepthQuery";
                 return (int)(await ExecuteQueryAsync(query, [], QueryTypeEnum.SQLQuery)).Tables[0].Rows[0]["MaxDepth"];
             }, new CacheSettings(1440, "GetWebPageItemMaxDepth"));
+            return depth < 1 ? 1 : depth;
         }
 
         // Didn't want to have a dependency on XperienceCommunity.DevTools.QueryExtensions, i really wish Kentico added this...
@@ -419,7 +421,7 @@ from
 		from 
 		(
 			Select CF1.ContentFolderID,
-			COALESCE({string.Join(",", folderPermissionSettingCoalesceItems)}) as MemberPermissionID
+			COALESCE(null, {string.Join(",", folderPermissionSettingCoalesceItems)}) as MemberPermissionID
 			from CMS_ContentFolder as CF1 left join XperienceCommunity_ContentFolderMemberPermissionSetting as CFS1 on CF1.ContentFolderID = CFS1.ContentFolderMemberPermissionContentFolderID and CFS1.ContentFolderMemberPermissionSettingBreakInheritance = 1
 	        {string.Join(" ", folderTableJoinItems)}
 			where CF1.ContentFolderID = {contentFolderId}
@@ -505,7 +507,7 @@ from
 		from 
 		(
 			select WP1.WebPageItemID,
-			COALESCE({string.Join(",", webPagePermissionSettingCoalesceItems)}) as MemberPermissionID
+			COALESCE(null, {string.Join(",", webPagePermissionSettingCoalesceItems)}) as MemberPermissionID
 			from CMS_WebPageItem as WP1 left join XperienceCommunity_WebPageItemMemberPermissionSetting as MPS1 on WP1.WebPageItemID = MPS1.WebPageItemMemberPermissionSettingWebPageItemID and MPS1.WebPageItemMemberPermissionSettingBreakInheritance = 1
 			{string.Join(" ", webPageTableJoinItems)}
 			where WP1.WebPageItemID = {webPageItemId}
