@@ -17,9 +17,9 @@
     <RepositoryUrl>https://github.com/KenticoDevTrev/MembershipRoles_Temp</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>Xperience, Roles, Member, Kentico, XbyK, Permissions</PackageTags>
-    <PackageReleaseNotes>Added Indicator on installer that it ran for dependent packages.</PackageReleaseNotes>
+    <PackageReleaseNotes>Upgraded to Xperience Version 30 and add Visibilty toggle thats now supported</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>1.0.5</Version>
+    <Version>2.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -38,7 +38,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Kentico.Xperience.WebApp" Version="29.7.0" />
+    <PackageReference Include="Kentico.Xperience.WebApp" Version="30.0.0" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

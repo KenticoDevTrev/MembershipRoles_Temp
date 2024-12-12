@@ -4,6 +4,7 @@ using CMS.DataEngine;
 using CMS.EventLog;
 using CMS.FormEngine;
 using CMS.Modules;
+using Kentico.Forms.Web.Mvc;
 using MemberInfo = CMS.Membership.MemberInfo;
 
 namespace XperienceCommunity.MemberRoles
@@ -477,6 +478,9 @@ If custom Member Permissions are assigned, these will only impact this Content I
             isSecureField.SetPropertyValue(FormFieldPropertyEnum.FieldDescriptionAsHtml, "False");
             isSecureField.Properties["kxp_schema_identifier"] = schemaGuid.ToString().ToLower();
 
+            // Seems to be no API yet for this...
+            isSecureField.VisibilityConditionConfigurationXmlData = @"<VisibilityConditionConfiguration><Identifier>Kentico.Administration.IsTrueVisibilityCondition</Identifier><Properties><PropertyName>MemberPermissionOverride</PropertyName></Properties></VisibilityConditionConfiguration>";
+
             if (existingIsSecureField != null) {
                 contentItemCommonDataForm.UpdateFormField(nameof(IXperienceCommunityMemberPermissionConfiguration.MemberPermissionIsSecure), isSecureField);
             } else {
@@ -500,6 +504,9 @@ If custom Member Permissions are assigned, these will only impact this Content I
             roleTagField.SetPropertyValue(FormFieldPropertyEnum.FieldCaption, "Member Roles");
             roleTagField.SetPropertyValue(FormFieldPropertyEnum.FieldDescriptionAsHtml, "False");
             roleTagField.Properties["kxp_schema_identifier"] = schemaGuid.ToString().ToLower();
+
+            // Seems to be no API yet for this...
+            roleTagField.VisibilityConditionConfigurationXmlData = @"<VisibilityConditionConfiguration><Identifier>Kentico.Administration.IsTrueVisibilityCondition</Identifier><Properties><PropertyName>MemberPermissionOverride</PropertyName></Properties></VisibilityConditionConfiguration>";
 
             if (existingRoleTagsField != null) {
                 contentItemCommonDataForm.UpdateFormField(nameof(IXperienceCommunityMemberPermissionConfiguration.MemberPermissionRoleTags), roleTagField);

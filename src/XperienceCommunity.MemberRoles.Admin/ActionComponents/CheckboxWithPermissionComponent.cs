@@ -19,13 +19,15 @@ namespace XperienceCommunity.MemberRoles.Admin.ActionComponents
 
         protected override async Task ConfigureClientProperties(CheckboxWithMemberRoleSummaryClientProperties clientProperties)
         {
-#pragma warning disable CS0618 // Type or member is obsolete - The one it currently uses is internal so have to use this
-            if (FormContext is IContentItemFormContext context) {
-                var contentItemId = context.ItemId;
-                var language = context.LanguageName;
-                clientProperties.MemberRolePermissionSummary = (await _memberPermissionSummaryRepository.GetMemberRolePermissionSummaryByContentItem(contentItemId, language)).ToClientProperties(_adminPathRetriever.GetAdminPrefix());
+            if (FormContext != null) {
+                var itemIdProp = FormContext.GetType().GetProperties().FirstOrDefault(x => x.Name == "ItemId");
+                var langProp = FormContext.GetType().GetProperties().FirstOrDefault(x => x.Name == "LanguageName");
+                if (itemIdProp != null && langProp != null) {
+                    var contentItemId = (int)(itemIdProp.GetValue(FormContext) ?? 0);
+                    var language = (string)(langProp.GetValue(FormContext) ?? "");
+                    clientProperties.MemberRolePermissionSummary = (await _memberPermissionSummaryRepository.GetMemberRolePermissionSummaryByContentItem(contentItemId, language)).ToClientProperties(_adminPathRetriever.GetAdminPrefix());
+                }
             }
-#pragma warning restore CS0618 // Type or member is obsolete
 
             await base.ConfigureClientProperties(clientProperties);
         }
@@ -33,14 +35,18 @@ namespace XperienceCommunity.MemberRoles.Admin.ActionComponents
         [FormComponentCommand]
         public async Task<ICommandResponse<MemberRolesPermissionSummaryClientProperties>> RefreshPermissions()
         {
-#pragma warning disable CS0618 // Type or member is obsolete - The one it currently uses is internal so have to use this
-            if (FormContext is IContentItemFormContext context) {
-                var contentItemId = context.ItemId;
-                var language = context.LanguageName;
-                return ResponseFrom((await _memberPermissionSummaryRepository.GetMemberRolePermissionSummaryByContentItem(contentItemId, language)).ToClientProperties(_adminPathRetriever.GetAdminPrefix()));
+            if(FormContext != null) {
+                var itemIdProp = FormContext.GetType().GetProperties().FirstOrDefault(x => x.Name == "ItemId");
+                var langProp = FormContext.GetType().GetProperties().FirstOrDefault(x => x.Name == "LanguageName");
+                if(itemIdProp != null && langProp != null) {
+                    var contentItemId = (int)(itemIdProp.GetValue(FormContext) ?? 0);
+                    var language = (string)(langProp.GetValue(FormContext) ?? "");
+                    return ResponseFrom((await _memberPermissionSummaryRepository.GetMemberRolePermissionSummaryByContentItem(contentItemId, language)).ToClientProperties(_adminPathRetriever.GetAdminPrefix()));
+                }
             }
-#pragma warning restore CS0618 // Type or member is obsolete
-            return ResponseFrom(new MemberRolesPermissionSummaryClientProperties());
+            return ResponseFrom(new MemberRolesPermissionSummaryClientProperties() {
+                InheritingFrom = "Sorry, this functionality is not available due to Xperience Code Changes"
+            });
         }
     }
 
