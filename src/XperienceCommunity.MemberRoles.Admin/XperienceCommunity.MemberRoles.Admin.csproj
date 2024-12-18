@@ -37,9 +37,9 @@
     <RepositoryUrl>https://github.com/KenticoDevTrev/MembershipRoles_Temp</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>Xperience, Roles, Member, Kentico, XbyK, Permissions</PackageTags>
-    <PackageReleaseNotes>Upgraded to Xperience Version 30 and add Visibilty toggle thats now supported</PackageReleaseNotes>
+    <PackageReleaseNotes>Made the installer service not required (just won't install if it's not added via the service collection extension)</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>2.0.1</Version>
+    <Version>2.0.2</Version>
   </PropertyGroup>
   <ItemGroup>
     <AdminClientPath Include="Client\dist\**">

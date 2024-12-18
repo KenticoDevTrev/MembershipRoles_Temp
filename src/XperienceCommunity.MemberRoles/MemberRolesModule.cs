@@ -28,7 +28,7 @@ namespace XperienceCommunity.MemberRoles
 
             // Installation
             _services = parameters.Services;
-            _installer = _services.GetRequiredService<MemberRolesInstaller>();
+            _installer = _services.GetService<MemberRolesInstaller>();
             ApplicationEvents.Initialized.Execute += InitializeModule;
         }
 
