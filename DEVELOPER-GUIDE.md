@@ -3,10 +3,12 @@
 In this guide, we will be covering how you can leverage the Member Roles system in code, and how to perform filtering on item(s) given the current member context.
 
 ## Installation
+
 Please see the main [Read Me](README.md) for installation.
 
 ## Nuget Package Split
-The XperienceCommunity.MemberRoles package is split up into 3 individual packges, with different Xperience Dependencies.  This is listed out on the  [Read Me](README.md).
+
+The XperienceCommunity.MemberRoles package is split up into 3 individual packges, with different Xperience Dependencies. This is listed out on the [Read Me](README.md).
 
 To go a little further into details, you may want to install the `XperienceCommunity.MemberRoles.Core` (which is Kentico Agnostic) so you have access to these items on your generic DTOs:
 
@@ -14,14 +16,16 @@ To go a little further into details, you may want to install the `XperienceCommu
 **IMemberAuthenticationContext**: This DI service allows a simplified user context for filtering, giving you the 3 core pieces of information you often need for things like Route Filtering (Authenticated, Username, and Roles)
 
 ## IXperienceCommunityMemberPermissionConfiguration Reusable Schema
+
 The application of this reusable schema to a Content Type is the indicator that this content type should be filtered based on the current member context.
 
 Once this reusable schema is applied to a Content Type in the Xperience Admin UI, it is important to [regenerate the page type code](https://docs.kentico.com/developers-and-admins/api/generate-code-files-for-system-objects#generate-code-files) so the compiler knows that your model has the appropriate fields to check permissions.
 
-## Filtering 
+## Filtering
+
 When filtering a list of items, you should retrieve your items into a list, then pass that list to `IMemberAuthorizationFilter.RemoveUnauthorizedItems`.
 
-This will do a type check on each item to see if it inherits the `IPermissionConfigurationBase` (which both the `IXperienceCommunityMemberPermissionConfiguration` and `IMemberPermissionConfiguration` inherit).  This is why it's important to cast your objects on the retrieval properly!
+This will do a type check on each item to see if it inherits the `IPermissionConfigurationBase` (which both the `IXperienceCommunityMemberPermissionConfiguration` and `IMemberPermissionConfiguration` inherit). This is why it's important to cast your objects on the retrieval properly!
 
 If it inherits, it will perform the necessary logic to check permissions against the current member context, if not, it will just return it as if it had no permissions.
 
@@ -29,7 +33,7 @@ Here are two examples of retrieving individual items, and multiple items:
 
 ```csharp
 // For single type query, use the .IncludeMemberAuthorization() to ensure the columns are returned that are needed for parsing.
-var singleTypeQuery = new ContentItemQueryBuilder().ForContentType(BasicPage.CONTENT_TYPE_NAME, query => 
+var singleTypeQuery = new ContentItemQueryBuilder().ForContentType(BasicPage.CONTENT_TYPE_NAME, query =>
     query.Columns(nameof(BasicPage.PageName))
          .IncludeMemberAuthorization() // This ensures the right columns are returned!!
 );
@@ -58,8 +62,47 @@ var itemsMultiType = await _contentQueryExecutor.GetResult<object>(multiTypeQuer
 var filteredItemsMultiList = await _memberAuthorizationFilter.RemoveUnauthorizedItems(itemsMultiType);
 ```
 
+## Filtering with Data Transfer Objects (DTO)
+
+The `IMemberAuthorizationFilter` can accept an Array of Items, but only filters those items if the item is either the `IXperienceCommunityMemberPermissionConfiguration` or `IMemberPermissionConfiguration` (both share an `IPermissionConfigurationBase`). `IXperienceCommunityMemberPermissionConfiguration` is something specific to the Reusable Schema, where as `IMemberPermissionConfiguration` can be placed on any DTO and contains the needed fields.
+
+Often time, you want to retrieve Xperience objects, but convert them to a DTO (Data Transfer Object, usually immutable records). It is advantageous to cache then the DTO instead of the Xperience Content Type model as your DTO will be slimmed down and only contain the needed items. However, once you return these items, you still need to filter them.
+
+There is a `IMemberPermissionConfigurationService` that helps bridge that gap, by allowing you to pass your DTO (and provide the original Content Item) and it will wrap it in the `DTOWithMemberPermissionConfiguration` for you. You can then cache this result, and externally filter them (selecting the `TDtoType Model` property from the filtered items).
+
+This will allow you to cache all the items, then filter afterwards since the user context may change from request to request.
+
+Here's a code sample:
+
+```csharp
+var childTabs = await _progressiveCache.LoadAsync(async cs => {
+    var webpageQuery = new ContentItemQueryBuilder().ForContentType(Tab.CONTENT_TYPE_NAME, query => query
+        .Where(where => where.WhereEquals(nameof(WebPageFields.WebPageItemParentID), parentWebPageID))
+    ).WithCultureContext(_cacheRepositoryContext);
+
+    var tabPages = await _contentQueryExecutor.GetMappedWebPageResult<Tab>(webpageQuery, new ContentQueryExecutionOptions().WithPreviewModeContext(_cacheRepositoryContext));
+
+    if(cs.Cached) {
+        cs.CacheDependency = CacheHelper.GetCacheDependency(tabPages.Select(x => $"webpageitem|byid|{x.SystemFields.WebPageItemID}").ToArray());
+    }
+
+    // Cast to DTO with permissions
+    var dtoWithPermissions = tabPages.Select(x => _memberPermissionConfigurationService.WrapGenericDTOWithMemberPermissions(new TabItem(x.TabName, x.SystemFields.WebPageItemID), x));
+    return dtoWithPermissions;
+}, new CacheSettings(60, "GetTabs", parentWebPageID, _cacheRepositoryContext.ToCacheNameIdentifier()));
+
+// Filter
+var filteredTabs = await _memberAuthorizationFilter.RemoveUnauthorizedItems(childTabs);
+
+// Return the DTO
+return filteredTabs.Select(x => x.Model);
+```
+
+Additionally, if you have custom DTO objects that you aren't sourcing from Xperience by Kentico, but you still want to set Filtering, you can manually add the `IMemberPermissionConfiguration` interface on your DTO. Then these can be passed to the `IMemberAuthorizationFilter` for filtering.
+
 ## Member Context and Member Role Management in Code
-The Member Roles is integrated with the Microsoft Identity system.  You can inject IUserStore, IUserRoleStore, and IRoleStore to get and manipulate roles.
+
+The Member Roles is integrated with the Microsoft Identity system. You can inject IUserStore, IUserRoleStore, and IRoleStore to get and manipulate roles.
 
 Here is a code snippet of some testing I did myself, the system properly created the Role Taxonomy Tags, assigned, etc:
 
@@ -118,12 +161,14 @@ public class TestController(
 ```
 
 ## Route Handling
+
 As mentioned in the main [Read Me](README.md), this system does not leverage the Web Page Permissions in routing requests.
 
 I will be working on the updated version of the [XperienceCommunity.Authorization](https://github.com/KenticoDevTrev/KenticoAuthorization#xperiencecommunityauthorization) package (probably wil be renamed XperienceCommunity.DevTools.Authorization) shortly that will then leverage these to introduce Controller Based and Tree Routing Based request filtering, tying into Page Permissions.
 
 ## Optimization and Cache Dependencies
-All code methods called should be highly optimized and usable as is (Caching is already applied appropriately).  
+
+All code methods called should be highly optimized and usable as is (Caching is already applied appropriately).
 
 It is recommended that you apply filtering outside of any IProgressiveCache retrieval of content, OR if you do want to filter within, please consider adding these 4 dependency keys to your caching:
 
@@ -136,4 +181,4 @@ $"{ContentFolderRoleTagInfo.OBJECT_TYPE}|all",
 
 Also found as a constant ReadOnlyCollection<string> in `MemberRoleConstants._InheritanceCacheDependencies`
 
-These will cover any possible inheritance changes, and in all likelyhood won't change often.  
+These will cover any possible inheritance changes, and in all likelyhood won't change often.

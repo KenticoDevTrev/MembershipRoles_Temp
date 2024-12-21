@@ -4,7 +4,9 @@ using CMS.Helpers;
 using System.Data;
 using System.Data.Common;
 using System.Text.Json;
+using XperienceCommunity.MemberRoles.Interfaces;
 using XperienceCommunity.MemberRoles.Models;
+using XperienceCommunity.MemberRoles.Services;
 
 namespace XperienceCommunity.MemberRoles.Repositories.Implementation
 {
@@ -67,7 +69,7 @@ namespace XperienceCommunity.MemberRoles.Repositories.Implementation
                     } else if(item is IMemberPermissionConfiguration customConfig
                         && customConfig.GetCheckPermissions()) {
                         contentId = customConfig.GetContentID();
-                        if (!customConfig.GetMemberPermissionOverride()) { 
+                        if (customConfig.GetMemberPermissionOverride()) { 
                             authSummary = new MemberAuthorizationSummary(customConfig.GetMemberPermissionIsSecure(), customConfig.GetMemberPermissionRoleTags().Select(x => x.ToLowerInvariant()));
                         } else if(contentIdToAuthorizationSummary.TryGetValue(contentId, out var summary)) {
                             authSummary = summary;

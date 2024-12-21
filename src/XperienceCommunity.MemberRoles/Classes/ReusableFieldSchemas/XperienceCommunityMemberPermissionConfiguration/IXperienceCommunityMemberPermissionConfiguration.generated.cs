@@ -9,15 +9,14 @@
 // </auto-generated>
 //--------------------------------------------------------------------------------------------------
 
-using CMS.ContentEngine;
-using XperienceCommunity.MemberRoles.Models;
+using XperienceCommunity.MemberRoles.Interfaces;
 
-namespace XperienceCommunity
+namespace CMS.ContentEngine
 {
-	/// <summary>
-	/// Defines a contract for content types with the <see cref="IXperienceCommunityMemberPermissionConfiguration"/> reusable schema assigned.
-	/// </summary>
-	public interface IXperienceCommunityMemberPermissionConfiguration : IPermissionConfigurationBase
+    /// <summary>
+    /// Defines a contract for content types with the <see cref="IXperienceCommunityMemberPermissionConfiguration"/> reusable schema assigned.
+    /// </summary>
+    public interface IXperienceCommunityMemberPermissionConfiguration : IPermissionConfigurationBase
     {
 		/// <summary>
 		/// Code name of the reusable field schema.

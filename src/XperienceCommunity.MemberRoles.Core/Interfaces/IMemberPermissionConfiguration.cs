@@ -1,4 +1,4 @@
-﻿namespace XperienceCommunity.MemberRoles.Models
+﻿namespace XperienceCommunity.MemberRoles.Interfaces
 {
     /// <summary>
     /// This interface can be used for custom objects when passing through the IMemberAuthorizationFilter.  Implementing this will give the filter the required information to determine access

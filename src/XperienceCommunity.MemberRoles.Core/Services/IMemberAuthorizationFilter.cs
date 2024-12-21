@@ -1,5 +1,4 @@
-﻿
-namespace XperienceCommunity.MemberRoles.Repositories
+﻿namespace XperienceCommunity.MemberRoles.Services
 {
     public interface IMemberAuthorizationFilter
     {

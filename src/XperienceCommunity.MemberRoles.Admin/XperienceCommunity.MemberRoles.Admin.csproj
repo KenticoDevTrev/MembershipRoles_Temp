@@ -37,9 +37,9 @@
     <RepositoryUrl>https://github.com/KenticoDevTrev/MembershipRoles_Temp</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>Xperience, Roles, Member, Kentico, XbyK, Permissions</PackageTags>
-    <PackageReleaseNotes>Made the installer service not required (just won't install if it's not added via the service collection extension)</PackageReleaseNotes>
+    <PackageReleaseNotes>Added new IMemberPermissionConfigurationService and DTOWithMemberPermissionConfiguration to help be able to return DTOs from Content Types but still easily be able to filter, moved couple interfaces into the Core Kentico agnostic project, and changed namespace from repository to service for a couple items.  Also fixed bug in filter logic.</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>2.0.2</Version>
+    <Version>2.3.1</Version>
   </PropertyGroup>
   <ItemGroup>
     <AdminClientPath Include="Client\dist\**">

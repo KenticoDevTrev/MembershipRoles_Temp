@@ -4,6 +4,7 @@ using XperienceCommunity.MemberRoles;
 using XperienceCommunity.MemberRoles.Models;
 using XperienceCommunity.MemberRoles.Repositories;
 using XperienceCommunity.MemberRoles.Repositories.Implementation;
+using XperienceCommunity.MemberRoles.Services;
 using XperienceCommunity.MemberRoles.Services.Implementations;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -24,6 +25,7 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.Services.AddScoped<IMemberAuthenticationContext, MemberAuthenticationContext<TUser>>()
                 .AddScoped<IUserLoginStore<TUser>, ApplicationUserStore<TUser>>()
                 .AddScoped<IUserRoleStore<TUser>, MemberRoleUserRoleStore<TUser>>()
+                .AddScoped<IMemberPermissionConfigurationService, MemberPermissionConfigurationService>()
                 .AddScoped<IMemberAuthorizationFilter, MemberAuthorizationFilterAndPermissionSummaryRepository>()
                 .AddScoped<IMemberPermissionSummaryRepository, MemberAuthorizationFilterAndPermissionSummaryRepository>()
                 .AddSingleton<MemberRolesInstaller>();

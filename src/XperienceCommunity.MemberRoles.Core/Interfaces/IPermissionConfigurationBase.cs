@@ -1,4 +1,4 @@
-﻿namespace XperienceCommunity.MemberRoles.Models
+﻿namespace XperienceCommunity.MemberRoles.Interfaces
 {
     /// <summary>
     /// Only used as a unifying Interface, your model should inherit either

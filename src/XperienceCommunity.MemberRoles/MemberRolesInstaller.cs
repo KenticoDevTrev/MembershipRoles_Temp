@@ -4,7 +4,6 @@ using CMS.DataEngine;
 using CMS.EventLog;
 using CMS.FormEngine;
 using CMS.Modules;
-using Kentico.Forms.Web.Mvc;
 using MemberInfo = CMS.Membership.MemberInfo;
 
 namespace XperienceCommunity.MemberRoles
