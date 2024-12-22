@@ -19,7 +19,7 @@
     <PackageTags>Xperience, Roles, Member, Kentico, XbyK, Permissions</PackageTags>
     <PackageReleaseNotes>Added new IMemberPermissionConfigurationService and DTOWithMemberPermissionConfiguration to help be able to return DTOs from Content Types but still easily be able to filter, moved couple interfaces into the Core Kentico agnostic project, and changed namespace from repository to service for a couple items.  Also fixed bug in filter logic.</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>2.3.1</Version>
+    <Version>2.3.2</Version>
   </PropertyGroup>
 
   <ItemGroup>
