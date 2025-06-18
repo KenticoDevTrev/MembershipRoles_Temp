@@ -17,9 +17,9 @@
     <RepositoryUrl>https://github.com/KenticoDevTrev/MembershipRoles_Temp</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>Xperience, Roles, Member, Kentico, XbyK, Permissions</PackageTags>
-    <PackageReleaseNotes>Added XperienceCommunityMemberPermissionConfigurationConfigurationForMapping which can be used with IContentItemQueryResultMapper to map and get the membership information no matter the source type.</PackageReleaseNotes>
+    <PackageReleaseNotes>Updated to Xperience 30.6.0 to resolve error in Add Column definition.</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>2.3.2</Version>
+    <Version>2.4.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

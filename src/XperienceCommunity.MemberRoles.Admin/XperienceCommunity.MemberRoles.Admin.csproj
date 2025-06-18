@@ -12,7 +12,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Kentico.Xperience.Admin" Version="30.0.0" />
+    <PackageReference Include="Kentico.Xperience.Admin" Version="30.6.0" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -37,9 +37,9 @@
     <RepositoryUrl>https://github.com/KenticoDevTrev/MembershipRoles_Temp</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>Xperience, Roles, Member, Kentico, XbyK, Permissions</PackageTags>
-    <PackageReleaseNotes>Added new IMemberPermissionConfigurationService and DTOWithMemberPermissionConfiguration to help be able to return DTOs from Content Types but still easily be able to filter, moved couple interfaces into the Core Kentico agnostic project, and changed namespace from repository to service for a couple items.  Also fixed bug in filter logic.</PackageReleaseNotes>
+    <PackageReleaseNotes>Updated to Xperience 30.6.0 to resolve error in Add Column definition.</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>2.3.2</Version>
+    <Version>2.4.0</Version>
   </PropertyGroup>
   <ItemGroup>
     <AdminClientPath Include="Client\dist\**">
