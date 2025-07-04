@@ -51,7 +51,7 @@ namespace XperienceCommunity.MemberRoles.Services.Implementations
                 .WhereEquals(nameof(MemberInfo.MemberID), user.Id)
                 .GetEnumerableTypedResultAsync(cancellationToken: cancellationToken)
                 ).FirstOrDefault();
-            }, new CacheSettings(20, "ApplicationuserToMember"));
+            }, new CacheSettings(20, "ApplicationuserToMember", user.Id));
 
         }
 
