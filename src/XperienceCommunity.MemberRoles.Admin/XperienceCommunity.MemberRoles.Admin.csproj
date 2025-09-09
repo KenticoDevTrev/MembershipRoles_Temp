@@ -37,9 +37,9 @@
     <RepositoryUrl>https://github.com/KenticoDevTrev/MembershipRoles_Temp</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>Xperience, Roles, Member, Kentico, XbyK, Permissions</PackageTags>
-    <PackageReleaseNotes>Updated to Xperience 30.6.0 to resolve error in Add Column definition.</PackageReleaseNotes>
+    <PackageReleaseNotes>Replaced DB Queries with DataQuery to fix DB Connections being left open</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>2.4.0</Version>
+    <Version>2.4.2</Version>
   </PropertyGroup>
   <ItemGroup>
     <AdminClientPath Include="Client\dist\**">

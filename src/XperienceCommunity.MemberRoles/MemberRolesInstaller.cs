@@ -3,6 +3,7 @@ using CMS.ContentEngine.Internal;
 using CMS.DataEngine;
 using CMS.EventLog;
 using CMS.FormEngine;
+using CMS.Helpers;
 using CMS.Modules;
 using MemberInfo = CMS.Membership.MemberInfo;
 
@@ -129,7 +130,7 @@ BEGIN
 	ALTER TABLE [dbo].[XperienceCommunity_MemberRoleTag] CHECK CONSTRAINT [FK_XperienceCommunity_MemberRoleTag_CMS_Tag]
 END
 ";
-                    ConnectionHelper.ExecuteNonQuery(foreignKeySql, [], QueryTypeEnum.SQLQuery);
+                    new DataQuery() { CustomQueryText = foreignKeySql }.ExecuteNonQuery();
                 } catch (Exception ex) {
                     EventLogProvider.LogEvent(new EventLogInfo("E", "MemberRoles", "InitializeMemberRoleTag Error") {
                         Exception = ex
@@ -197,7 +198,7 @@ BEGIN
 	ALTER TABLE [dbo].[XperienceCommunity_WebPageItemMemberPermissionSetting] CHECK CONSTRAINT [FK_XperienceCommunity_WebPageItemMemberPermissionSetting_CMS_WebPageItem]
 END
 ";
-                    ConnectionHelper.ExecuteNonQuery(foreignKeySql, [], QueryTypeEnum.SQLQuery);
+                    new DataQuery() { CustomQueryText = foreignKeySql }.ExecuteNonQuery();
                 } catch (Exception ex) {
                     EventLogProvider.LogEvent(new EventLogInfo("E", "MemberRoles", "InitializeWebPageItemMemberPermissionSetting Error") {
                         Exception = ex
@@ -266,8 +267,8 @@ BEGIN
 	ALTER TABLE [dbo].[XperienceCommunity_WebPageItemRoleTag] CHECK CONSTRAINT [FK_XperienceCommunity_WebPageItemRoleTag_CMS_Tag]
 END
 ";
-                    ConnectionHelper.ExecuteNonQuery(foreignKeySql, [], QueryTypeEnum.SQLQuery);
-                } catch (Exception ex) {
+                    new DataQuery() { CustomQueryText = foreignKeySql }.ExecuteNonQuery();
+                } catch (Exception ex) {    
                     EventLogProvider.LogEvent(new EventLogInfo("E", "RelationshipsExtended", "InitializeContentItemCategory Error") {
                         Exception = ex
                     });
@@ -334,7 +335,7 @@ ON DELETE CASCADE
 ALTER TABLE [dbo].[XperienceCommunity_ContentFolderMemberPermissionSetting] CHECK CONSTRAINT [FK_XperienceCommunity_ContentFolderMemberPermissionSetting_CMS_ContentFolder]
 END
 ";
-                    ConnectionHelper.ExecuteNonQuery(foreignKeySql, [], QueryTypeEnum.SQLQuery);
+                    new DataQuery() { CustomQueryText = foreignKeySql }.ExecuteNonQuery();
                 } catch (Exception ex) {
                     EventLogProvider.LogEvent(new EventLogInfo("E", "MemberRoles", "InitializeContentFolderMemberPermissionSettings Error") {
                         Exception = ex
@@ -405,7 +406,7 @@ BEGIN
 END
 
 ";
-                    ConnectionHelper.ExecuteNonQuery(foreignKeySql, [], QueryTypeEnum.SQLQuery);
+                    new DataQuery() { CustomQueryText = foreignKeySql }.ExecuteNonQuery();
                 } catch (Exception ex) {
                     EventLogProvider.LogEvent(new EventLogInfo("E", "MemberRoles", "InitializeContentFolderRoleTag Error") {
                         Exception = ex

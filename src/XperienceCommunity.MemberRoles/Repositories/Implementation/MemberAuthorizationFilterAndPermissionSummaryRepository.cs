@@ -238,8 +238,7 @@ from
 	inner join CMS_ContentItem on ContentItemContentFolderID = ContentItemToSecuritySettings.ContentFolderID
 ) Combined
 ";
-                return (await ExecuteQueryAsync(permissionQuery, [], QueryTypeEnum.SQLQuery))
-                    .Tables[0].Rows.Cast<DataRow>()
+                return (await new DataQuery() { CustomQueryText = permissionQuery }.GetDataContainerResultAsync())
                     .GroupBy(x => (int)x["InheritedMemberPermissionContentItemID"])
                     .ToDictionary(key => key.Key, value => new MemberAuthorizationSummary(
                         RequiresAuthentication: ValidationHelper.GetBoolean(value.First()["InheritedMemberPermissionRequiresAuthentication"], false),
@@ -259,7 +258,7 @@ from
                 }
 
                 var query = @"select max(Depth) as MaxDepth from (select LEN(ContentFolderTreePath) - LEN(REPLACE(ContentFolderTreePath, '/', '')) as Depth  from CMS_ContentFolder) DepthQuery";
-                return (int)(await ExecuteQueryAsync(query, [], QueryTypeEnum.SQLQuery)).Tables[0].Rows[0]["MaxDepth"];
+                return (int)await new DataQuery() { CustomQueryText = query }.ExecuteScalarAsync();
             }, new CacheSettings(1440, "GetContentFolderMaxDepth"));
             return depth < 1 ? 1 : depth;
         }
@@ -272,34 +271,9 @@ from
                 }
 
                 var query = @"select max(Depth) as MaxDepth from (select LEN(WebPageItemTreePath) - LEN(REPLACE(WebPageItemTreePath, '/', '')) as Depth  from CMS_WebPageItem) DepthQuery";
-                return (int)(await ExecuteQueryAsync(query, [], QueryTypeEnum.SQLQuery)).Tables[0].Rows[0]["MaxDepth"];
+                return (int)await new DataQuery() { CustomQueryText = query }.ExecuteScalarAsync();
             }, new CacheSettings(1440, "GetWebPageItemMaxDepth"));
             return depth < 1 ? 1 : depth;
-        }
-
-        // Didn't want to have a dependency on XperienceCommunity.DevTools.QueryExtensions, i really wish Kentico added this...
-        public static async Task<DataSet> ExecuteQueryAsync(string queryText, QueryDataParameters parameters, QueryTypeEnum queryType, CancellationToken token = default)
-        {
-            var reader = await ConnectionHelper.ExecuteReaderAsync(queryText, parameters, queryType, CommandBehavior.Default, token);
-            return DbDataReaderToDataSet(reader);
-        }
-
-        private static DataSet DbDataReaderToDataSet(DbDataReader reader)
-        {
-            var ds = new DataSet();
-            if (reader is null) {
-                ds.Tables.Add(new DataTable());
-                return ds;
-            }
-
-            // read each data result into a datatable
-            do {
-                var table = new DataTable();
-                table.Load(reader);
-                ds.Tables.Add(table);
-            } while (!reader.IsClosed);
-
-            return ds;
         }
 
         public async Task<MemberRolePermissionSummary> GetMemberRolePermissionSummaryByContentItem(int contentItemId, string language)
@@ -369,7 +343,7 @@ from
 left join CMS_WebPageItem on WebPageItemContentItemID = ContentItemID
 where ContentItemID = {contentItemId}
 ";
-            var result = (await ExecuteQueryAsync(query, [], QueryTypeEnum.SQLQuery)).Tables[0].Rows[0];
+            var result = (await new DataQuery() { CustomQueryText = query }.GetDataContainerResultAsync()).First();
             var webPageItemID = ValidationHelper.GetInteger(result["WebPageItemID"], 0);
             var contentItemFolderId = ValidationHelper.GetInteger(result["ContentItemContentFolderID"], 0);
             return new ContentItemSummaryLookup(WebPageItemID: webPageItemID > 0 ? webPageItemID : (int?)null, ContentItemFolderID: contentItemFolderId > 0 ? contentItemFolderId : (int?)null);
@@ -434,8 +408,7 @@ from
 ) Combined
 left join CMS_ContentFolder CF on CF.ContentFolderID = ContentFolderIDTaxonomyCheck";
 
-                var results = (await ExecuteQueryAsync(permissionQuery, [], QueryTypeEnum.SQLQuery))
-                    .Tables[0].Rows.Cast<DataRow>()
+                var results = (await new DataQuery() { CustomQueryText = permissionQuery }.GetDataContainerResultAsync())
                     .GroupBy(x => (int)x["ContentFolderID"])
                     .ToDictionary(key => key.Key, value => {
                         var firstRow = value.First();
@@ -526,10 +499,9 @@ inner join CMS_ContentItem on ContentItemID = WebPageItemContentItemID
 inner join CMS_ContentItemCommonData on ContentItemCommonDataContentItemID = ContentItemID
 where WebPageItemID = {webPageItemId} and MemberPermissionOverride = 1 and ContentItemCommonDataIsLatest = 1";
 
-                var overridesExist = (await ExecuteQueryAsync(overrideExistanceQuery, [], QueryTypeEnum.SQLQuery)).Tables[0].Rows.Count > 0;
+                var overridesExist = (await new DataQuery() { CustomQueryText = overrideExistanceQuery }.GetDataContainerResultAsync()).Count() > 0;
 
-                var items = (await ExecuteQueryAsync(permissionQuery, [], QueryTypeEnum.SQLQuery))
-                    .Tables[0].Rows.Cast<DataRow>()
+                var items = (await new DataQuery() { CustomQueryText = permissionQuery }.GetDataContainerResultAsync())
                     .GroupBy(x => (int)x["InheritedMemberPermissionWebPageItemID"])
                     .ToDictionary(key => key.Key, value => {
                         var firstRow = value.First();
