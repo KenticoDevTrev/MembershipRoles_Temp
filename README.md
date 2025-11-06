@@ -62,7 +62,7 @@ public static void AddStandardKenticoAuthentication(WebApplicationBuilder builde
 ```
 
 ## Guide
-Please see the [Admin Guide](ADMIN-GUIDE.md) for Xperience Users or the [Developer Guide](DEVELOPER_GUIDE.md) for instructions.
+Please see the [Admin Guide](ADMIN-GUIDE.md) for Xperience Users or the [Developer Guide](DEVELOPER-GUIDE.md) for instructions.
 
 ## Using Web Page Route Security
 
