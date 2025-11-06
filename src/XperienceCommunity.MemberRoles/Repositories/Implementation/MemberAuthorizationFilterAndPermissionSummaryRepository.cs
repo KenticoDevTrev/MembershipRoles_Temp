@@ -160,7 +160,7 @@ namespace XperienceCommunity.MemberRoles.Repositories.Implementation
                 var webPageTableJoinItems = new List<string>();
                 for (var i = 1; i <= webPageMaxDepth; i++) {
                     webPagePermissionSettingCoalesceItems.Add($"MPS{i}.WebPageItemMemberPermissionSettingID");
-                    webPageTableJoinItems.Add($"left join CMS_WebPageItem as WP{i} on WP{i - 1}.WebPageItemParentID = WP{i}.WebPageItemID left join XperienceCommunity_WebPageItemMemberPermissionSetting as MPS{i} on WP{i}.WebPageItemID = MPS{i}.WebPageItemMemberPermissionSettingWebPageItemID and MPS{1}.WebPageItemMemberPermissionSettingBreakInheritance = 1");
+                    webPageTableJoinItems.Add($"left join CMS_WebPageItem as WP{i} on WP{i - 1}.WebPageItemParentID = WP{i}.WebPageItemID left join XperienceCommunity_WebPageItemMemberPermissionSetting as MPS{i} on WP{i}.WebPageItemID = MPS{i}.WebPageItemMemberPermissionSettingWebPageItemID and MPS{i}.WebPageItemMemberPermissionSettingBreakInheritance = 1");
                 }
                 // First join is different format
                 webPageTableJoinItems.RemoveAt(0);
@@ -169,7 +169,7 @@ namespace XperienceCommunity.MemberRoles.Repositories.Implementation
                 var folderTableJoinItems = new List<string>();
                 for (var i = 1; i <= folderMaxDepth; i++) {
                     folderPermissionSettingCoalesceItems.Add($"CFS{i}.ContentFolderMemberPermissionSettingID");
-                    folderTableJoinItems.Add($"left join CMS_ContentFolder as CF{i} on CF{i - 1}.ContentFolderParentFolderID = CF{i}.ContentFolderID left join XperienceCommunity_ContentFolderMemberPermissionSetting as CFS{i} on CF{i}.ContentFolderID = CFS{i}.ContentFolderMemberPermissionContentFolderID and CFS{1}.ContentFolderMemberPermissionSettingBreakInheritance = 1");
+                    folderTableJoinItems.Add($"left join CMS_ContentFolder as CF{i} on CF{i - 1}.ContentFolderParentFolderID = CF{i}.ContentFolderID left join XperienceCommunity_ContentFolderMemberPermissionSetting as CFS{i} on CF{i}.ContentFolderID = CFS{i}.ContentFolderMemberPermissionContentFolderID and CFS{i}.ContentFolderMemberPermissionSettingBreakInheritance = 1");
                 }
                 // First join is different format
                 folderTableJoinItems.RemoveAt(0);
