@@ -17,9 +17,9 @@
     <RepositoryUrl>https://github.com/KenticoDevTrev/MembershipRoles_Temp</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>Xperience, Roles, Member, Kentico, XbyK, Permissions</PackageTags>
-    <PackageReleaseNotes>Update to Xperience 30.9 Refresh and Replaced DB Queries with DataQuery to fix DB Connections being left open</PackageReleaseNotes>
+    <PackageReleaseNotes>Pulled in fix to inherited folder issue on remove items, and IsInRole where column name fix.</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>2.5.0</Version>
+    <Version>2.5.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

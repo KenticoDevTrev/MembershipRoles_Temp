@@ -9,11 +9,12 @@ Roles can be created, assigned to Members, and Content Items can be secured with
 
 ## Library Version Matrix
 
-This project is using [Xperience Version v30.6.0](https://docs.kentico.com/changelog).
+This project is using [Xperience Version v30.9.0](https://docs.kentico.com/changelog).
 
 | Xperience Version  | Library Version |
 | ------------------ | --------------- |
-| >= 30.6.*          | 2.4.0           |
+| >= 30.9.*          | 2.5.0           |
+|    30.6.*          | 2.4.0           |
 |    30.0.0-30.5.4   | 2.0.0-2.3.2     |
 |    29.7.*          | 1.0.0           |
 
