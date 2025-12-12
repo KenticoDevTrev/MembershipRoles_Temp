@@ -139,7 +139,7 @@ namespace XperienceCommunity.MemberRoles.Services.Implementations
 
                 return (await _memberRoleTagInfoProvider.Get()
                 .WhereEquals(nameof(MemberRoleTagInfo.MemberRoleTagTagID), roleTagId)
-                .WhereEquals(nameof(MemberInfo.MemberID), user.Id)
+                .WhereEquals(nameof(MemberRoleTagInfo.MemberRoleTagMemberID), user.Id)
                 .GetEnumerableTypedResultAsync(cancellationToken: cancellationToken)
                 ).Any();
             }, new CacheSettings(20, "MemberRoleUserStore_IsInRoleAsync", roleName, user.Id), cancellationToken: cancellationToken);
