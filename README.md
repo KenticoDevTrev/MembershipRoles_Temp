@@ -13,7 +13,8 @@ This project is using [Xperience Version v30.9.0](https://docs.kentico.com/chang
 
 | Xperience Version  | Library Version |
 | ------------------ | --------------- |
-| >= 30.9.*          | 2.5.0           |
+| >= 31.0.*          | 2.6.0           |
+|    30.9.0-30.12.3  | 2.5.0           |
 |    30.6.*          | 2.4.0           |
 |    30.0.0-30.5.4   | 2.0.0-2.3.2     |
 |    29.7.*          | 1.0.0           |
