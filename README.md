@@ -1,6 +1,22 @@
 
 # XperienceCommunity.MemberRoles
 
+## OBSOLETE / Migration
+
+Xperience by Kentico's March 26 Refresh (31.3.0) now contains Membership Roles.  
+
+For those who have used this package, please know that the capabilities are nearly one to one.  The three major differences are:
+
+1. There is no Membership Roles on Content Folders (that then apply to all children).  These roles are on individual Content Items, but you CAN apply roles in mass easily (select all items in the folder and apply a role)
+2. Similarly for Web Page Items, there isn't a role you set on the parent that always applies to children, but you CAN apply role changes to all children under a web page when you make changes.  Just be careful of cases where you 'break' inheritance on a child, because re-applying a role change on the parent will reset inheritance to the parent for any children.
+3. Although less used, the ability to apply membership roles on ANY C# object (via an interface) is also not part of the Xperience version...honestly I would be surprised if many people used this.
+
+I would encourage you to migrate to the Built in package as long as it's possible.  My version of the Membership Roles is still there if you need it, but I myself will be migrating off at some point.
+
+Additionally for Baseline Users, the baseline will not be updated for this refresh yet.  I plan (or hope to) build an Xperience only Baseline project on .net 10 once things slow down, probably another Christmas present launch.
+
+Xperience may be creating a migration script, but it's not guarenteed.  Please let me know if you need help with migrating, I won't be migrating off until later.
+
 ## Description
 
 This is a community created package to allow Member Roles and permissions in Xperience by Kentico (until this logic is baked into the product).
